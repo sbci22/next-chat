@@ -1,0 +1,102 @@
+from pathlib import Path
+
+html = r'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#075e54">
+<title>NexChat — Connect Without Limits</title>
+<style>
+:root{--green:#087e70;--green2:#0aa58d;--deep:#075e54;--bg:#e9eff2;--panel:#fff;--side:#f8fafb;--text:#17252b;--muted:#718087;--line:#e8edef;--bubble:#dff7ed;--their:#fff;--shadow:0 12px 35px #17343d12}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden}button,input,textarea{font:inherit}button{cursor:pointer;border:0} .app{height:100vh;display:grid;place-items:center;padding:22px;background:linear-gradient(135deg,#e7f2ef,#e9eff7)}
+.shell{width:min(1440px,100%);height:min(900px,100%);min-height:540px;background:var(--panel);border-radius:22px;overflow:hidden;display:grid;grid-template-columns:360px 1fr;box-shadow:0 25px 80px #143b4420}
+.sidebar{background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column;min-width:0}.topbar{height:76px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:21px;letter-spacing:-.6px}.logo{width:38px;height:38px;border-radius:13px;background:linear-gradient(145deg,#0dbb9c,#075e54);display:grid;place-items:center;color:white;font-size:21px;box-shadow:0 6px 14px #087e7033}.brand small{display:block;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:1.7px;margin-top:1px}.iconbtn{width:38px;height:38px;border-radius:12px;background:transparent;color:#65757b;font-size:18px;display:grid;place-items:center}.iconbtn:hover{background:#eaf1f0;color:var(--green)}
+.profilebar{padding:13px 18px;display:flex;align-items:center;gap:10px}.avatar{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;color:white;font-weight:750;flex-shrink:0;background:linear-gradient(145deg,#60a5fa,#2563eb);position:relative}.avatar:after{content:"";position:absolute;width:10px;height:10px;border:2px solid white;border-radius:50%;background:#20c987;right:0;bottom:1px}.profileinfo{flex:1;min-width:0}.profileinfo b{display:block;font-size:14px}.profileinfo span{font-size:12px;color:var(--muted)}.searchwrap{padding:0 18px 14px;position:relative}.searchwrap input{width:100%;border:1px solid var(--line);outline:0;background:#eef3f4;border-radius:12px;padding:12px 14px 12px 40px;font-size:13px}.searchwrap input:focus{border-color:#8acfc3;background:white}.searchicon{position:absolute;left:32px;top:11px;color:#809096}.tabs{display:flex;padding:0 18px 12px;gap:8px}.tab{padding:8px 13px;border-radius:20px;background:transparent;color:var(--muted);font-size:12px;font-weight:650}.tab.active{background:#dff4ed;color:var(--deep)}.contactlist{overflow:auto;flex:1;padding:0 9px 12px}.contact{width:100%;display:flex;align-items:center;gap:12px;text-align:left;padding:12px 10px;border-radius:13px;background:transparent;color:inherit}.contact:hover,.contact.active{background:#eaf4f1}.contact .avatar{width:48px;height:48px;font-size:14px}.contact .avatar:after{display:none}.contactmain{min-width:0;flex:1}.contacthead{display:flex;justify-content:space-between;gap:8px;align-items:center}.contacthead b{font-size:13px}.contacthead time{font-size:10px;color:var(--muted);white-space:nowrap}.preview{display:flex;justify-content:space-between;gap:8px;margin-top:5px;color:var(--muted);font-size:11px}.preview span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.unread{background:var(--green2);color:white;border-radius:20px;min-width:19px;height:19px;padding:0 5px;display:grid;place-items:center;font-size:10px;font-weight:700}
+.chatarea{display:flex;flex-direction:column;min-width:0;background:#f4f7f7;position:relative}.chathead{height:76px;background:white;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 22px;gap:12px;z-index:2}.chathead .avatar{width:43px;height:43px}.chatname{flex:1;min-width:0}.chatname b{display:block;font-size:14px}.chatname span{font-size:11px;color:var(--green)}.headactions{display:flex;gap:4px}.headactions .iconbtn{font-size:19px}.messages{flex:1;overflow:auto;padding:26px clamp(16px,5vw,70px);background-color:#edf3f1;background-image:radial-gradient(#cbdcd5 0.7px,transparent .7px);background-size:19px 19px;display:flex;flex-direction:column;gap:10px}.daylabel{align-self:center;background:#ffffffd9;color:#718087;padding:6px 13px;border-radius:9px;font-size:10px;box-shadow:0 2px 8px #17343d0c;margin-bottom:8px}.message{max-width:min(72%,520px);padding:10px 12px 7px;border-radius:13px;background:var(--their);box-shadow:0 2px 4px #17343d0b;align-self:flex-start;position:relative;font-size:13px;line-height:1.5;overflow-wrap:anywhere}.message.mine{align-self:flex-end;background:var(--bubble);border-top-right-radius:4px}.message:not(.mine){border-top-left-radius:4px}.msgmeta{display:flex;align-items:center;justify-content:flex-end;gap:5px;color:#82918f;font-size:9px;margin-top:3px}.ticks{color:#168cba;font-size:12px}.composerwrap{padding:14px 22px 18px;background:white;border-top:1px solid var(--line)}.replyhint{display:none;font-size:11px;color:var(--green);padding:0 0 8px}.composer{display:flex;align-items:flex-end;gap:9px}.composebtn{width:40px;height:42px;border-radius:13px;background:transparent;color:#708087;font-size:20px;flex-shrink:0}.composebtn:hover{background:#eef5f3;color:var(--green)}.messageinput{flex:1;resize:none;min-height:44px;max-height:120px;border:1px solid var(--line);border-radius:14px;padding:12px 14px;outline:none;background:#f6f8f8;font-size:13px}.messageinput:focus{border-color:#8acfc3;background:white}.sendbtn{height:44px;width:46px;border-radius:14px;background:linear-gradient(145deg,#0ab391,#087568);color:white;font-size:19px;box-shadow:0 5px 12px #087e7030}.sendbtn:hover{filter:brightness(1.06);transform:translateY(-1px)}.empty{flex:1;display:grid;place-items:center;text-align:center;padding:30px}.empty .biglogo{width:86px;height:86px;border-radius:28px;background:linear-gradient(145deg,#0dbb9c,#075e54);display:grid;place-items:center;color:white;font-size:42px;margin:0 auto 18px;box-shadow:0 15px 30px #087e7030}.empty h2{margin:0 0 8px;font-size:23px}.empty p{max-width:390px;color:var(--muted);font-size:13px;line-height:1.7}.mobileback{display:none}.toast{position:fixed;bottom:25px;left:50%;transform:translate(-50%,20px);background:#172f34;color:white;padding:11px 17px;border-radius:11px;font-size:12px;opacity:0;pointer-events:none;transition:.25s;z-index:20}.toast.show{opacity:1;transform:translate(-50%,0)}.modalback{position:fixed;inset:0;background:#102b2d66;display:none;place-items:center;z-index:10;padding:20px}.modalback.show{display:grid}.modal{background:white;width:min(390px,100%);border-radius:18px;padding:22px;box-shadow:var(--shadow)}.modal h3{margin:0 0 7px}.modal p{font-size:12px;color:var(--muted);line-height:1.6}.modal input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;outline:0;margin:8px 0}.primary{background:var(--green);color:white;border-radius:10px;padding:11px 16px;font-weight:650}.secondary{background:#edf3f1;color:#4f6265;border-radius:10px;padding:11px 16px}.modalactions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}.typing{font-size:10px;color:var(--green);padding-left:6px;min-height:14px}
+@media(max-width:760px){.app{padding:0}.shell{height:100vh;width:100%;min-height:0;border-radius:0;grid-template-columns:1fr}.sidebar{display:flex}.chatarea{display:none}.shell.chat-open .sidebar{display:none}.shell.chat-open .chatarea{display:flex}.mobileback{display:grid}.topbar{height:66px}.chathead{height:66px;padding:0 12px}.headactions .iconbtn:nth-child(2){display:none}.messages{padding:18px 13px}.message{max-width:85%}.composerwrap{padding:10px 10px 13px}.profilebar{padding:10px 16px}.contactlist{padding:0 8px}.headactions{gap:0}.chatname span{font-size:10px}}
+@media(min-width:761px){.shell{grid-template-columns:350px 1fr}}
+</style>
+</head>
+<body>
+<div class="app"><main class="shell" id="shell">
+<aside class="sidebar">
+ <header class="topbar"><div class="brand"><div class="logo">✦</div><div>NexChat<small>CONNECT WITHOUT LIMITS</small></div></div><button class="iconbtn" id="newChat" title="New chat">＋</button></header>
+ <div class="profilebar"><div class="avatar" style="background:linear-gradient(145deg,#f59e0b,#ea580c)">VP</div><div class="profileinfo"><b>You · Vinkal</b><span>Available</span></div><button class="iconbtn" id="themeBtn" title="Toggle theme">◐</button><button class="iconbtn" id="settingsBtn" title="Settings">⚙</button></div>
+ <div class="searchwrap"><span class="searchicon">⌕</span><input id="search" placeholder="Search chats or messages..." autocomplete="off"></div>
+ <nav class="tabs"><button class="tab active" data-filter="all">All chats</button><button class="tab" data-filter="unread">Unread</button><button class="tab" data-filter="groups">Groups</button></nav>
+ <div class="contactlist" id="contactList"></div>
+</aside>
+<section class="chatarea">
+ <header class="chathead" id="chatHead" style="display:none"><button class="iconbtn mobileback" id="backBtn">←</button><div class="avatar" id="headAvatar"></div><div class="chatname"><b id="headName">Choose a chat</b><span id="headStatus">online</span></div><div class="headactions"><button class="iconbtn" id="callBtn" title="Voice call">☎</button><button class="iconbtn" id="videoBtn" title="Video call">▣</button><button class="iconbtn" id="chatMore" title="More">⋮</button></div></header>
+ <div class="empty" id="welcome"><div><div class="biglogo">✦</div><h2>Your conversations, connected.</h2><p>Welcome to NexChat. Select a conversation to start messaging. Fast, simple and made for everyone.</p></div></div>
+ <div class="messages" id="messages" style="display:none"><div class="daylabel">TODAY</div></div>
+ <div class="typing" id="typing"></div>
+ <div class="composerwrap" id="composerWrap" style="display:none"><div class="replyhint" id="replyHint"></div><div class="composer"><button class="composebtn" id="emojiBtn" title="Emoji">☺</button><button class="composebtn" id="attachBtn" title="Attach file">＋</button><textarea class="messageinput" id="messageInput" rows="1" placeholder="Write a message..."></textarea><button class="sendbtn" id="sendBtn" title="Send message">➤</button><input type="file" id="fileInput" hidden></div></div>
+</section>
+</main></div>
+<div class="toast" id="toast"></div>
+<div class="modalback" id="modalBack"><div class="modal"><h3 id="modalTitle">New conversation</h3><p id="modalText">Add a contact to your NexChat demo.</p><input id="modalInput" placeholder="Contact name"><div class="modalactions"><button class="secondary" id="cancelModal">Cancel</button><button class="primary" id="confirmModal">Continue</button></div></div></div>
+<script>
+const seed=[
+ {id:1,name:"Aarav Sharma",initials:"AS",color:"linear-gradient(145deg,#60a5fa,#2563eb)",status:"online",group:false,unread:2,preview:"The photos look amazing! 📸",time:"9:14 AM",messages:[["them","Hey! How are you doing?", "9:02 AM"],["me","I'm good! How about you?", "9:05 AM"],["them","All good. Are we still meeting today?", "9:08 AM"],["me","Yes, absolutely. See you at 5!", "9:10 AM"],["them","The photos look amazing! 📸", "9:14 AM"]]},
+ {id:2,name:"Priya Verma",initials:"PV",color:"linear-gradient(145deg,#f472b6,#be185d)",status:"last seen recently",group:false,unread:0,preview:"Thank you so much 😊",time:"8:48 AM",messages:[["them","Did you check the new design?", "8:40 AM"],["me","Yes, it looks beautiful!", "8:44 AM"],["them","Thank you so much 😊", "8:48 AM"]]},
+ {id:3,name:"SBCI Students Group",initials:"SG",color:"linear-gradient(145deg,#34d399,#047857)",status:"12 members",group:true,unread:5,preview:"Rohan: Class starts at 10 AM",time:"8:30 AM",messages:[["them","Ananya: Good morning everyone!", "8:20 AM"],["them","Rohan: Class starts at 10 AM", "8:30 AM"]]},
+ {id:4,name:"Rahul Gupta",initials:"RG",color:"linear-gradient(145deg,#fbbf24,#b45309)",status:"online",group:false,unread:0,preview:"Send me the project link.",time:"Yesterday",messages:[["them","Send me the project link.", "Yesterday"]]},
+ {id:5,name:"Family Circle",initials:"FC",color:"linear-gradient(145deg,#a78bfa,#6d28d9)",status:"8 members",group:true,unread:0,preview:"Mom: Have a great day ❤️",time:"Yesterday",messages:[["them","Mom: Have a great day ❤️", "Yesterday"]]},
+ {id:6,name:"Neha Singh",initials:"NS",color:"linear-gradient(145deg,#2dd4bf,#0f766e)",status:"last seen 10 min ago",group:false,unread:0,preview:"Okay, talk later!",time:"Monday",messages:[["me","I'll call you in the evening.", "Monday"],["them","Okay, talk later!", "Monday"]]}
+];
+let chats=JSON.parse(localStorage.getItem("nexchat_chats")||"null")||seed;
+let activeId=null,filter="all",dark=false;
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem("nexchat_chats",JSON.stringify(chats))}
+function toast(t){$("toast").textContent=t;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2200)}
+function renderContacts(){
+ const q=$("search").value.toLowerCase();
+ let list=chats.filter(c=>(c.name.toLowerCase().includes(q)||c.preview.toLowerCase().includes(q))&&(filter==="all"||(filter==="unread"&&c.unread>0)||(filter==="groups"&&c.group)));
+ $("contactList").innerHTML=list.map(c=>`<button class="contact ${activeId===c.id?'active':''}" data-id="${c.id}"><div class="avatar" style="background:${c.color}">${escapeHtml(c.initials)}</div><div class="contactmain"><div class="contacthead"><b>${escapeHtml(c.name)}</b><time>${escapeHtml(c.time)}</time></div><div class="preview"><span>${escapeHtml(c.preview)}</span>${c.unread?`<b class="unread">${c.unread}</b>`:""}</div></div></button>`).join("")||'<p style="padding:20px;color:#809096;font-size:12px">No conversations found.</p>';
+ document.querySelectorAll(".contact").forEach(el=>el.onclick=()=>openChat(Number(el.dataset.id)));
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function openChat(id){
+ activeId=id;let c=chats.find(x=>x.id===id);if(!c)return;c.unread=0;
+ $("welcome").style.display="none";$("chatHead").style.display="flex";$("messages").style.display="flex";$("composerWrap").style.display="block";
+ $("headAvatar").textContent=c.initials;$("headAvatar").style.background=c.color;$("headName").textContent=c.name;$("headStatus").textContent=c.status;
+ renderMessages();renderContacts();$("shell").classList.add("chat-open");$("messageInput").focus();save();
+}
+function renderMessages(){
+ let c=chats.find(x=>x.id===activeId);if(!c)return;
+ $("messages").innerHTML='<div class="daylabel">TODAY</div>'+c.messages.map(m=>`<div class="message ${m[0]==='me'?'mine':''}">${escapeHtml(m[1])}<div class="msgmeta">${escapeHtml(m[2])}${m[0]==='me'?'<span class="ticks">✓✓</span>':''}</div></div>`).join("");
+ $("messages").scrollTop=$("messages").scrollHeight;
+}
+function sendMessage(text){
+ text=text.trim();if(!text||!activeId)return;let c=chats.find(x=>x.id===activeId);let now=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+ c.messages.push(["me",text,now]);c.preview=text;c.time=now;save();renderMessages();renderContacts();$("messageInput").value="";$("messageInput").style.height="44px";
+}
+$("sendBtn").onclick=()=>sendMessage($("messageInput").value);
+$("messageInput").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMessage(e.target.value)}});
+$("messageInput").addEventListener("input",e=>{e.target.style.height="44px";e.target.style.height=Math.min(e.target.scrollHeight,120)+"px"});
+$("search").addEventListener("input",renderContacts);
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));renderContacts()});
+$("backBtn").onclick=()=>$("shell").classList.remove("chat-open");
+$("emojiBtn").onclick=()=>{let el=$("messageInput");el.value+=" 😊";el.focus()};
+$("attachBtn").onclick=()=>$("fileInput").click();
+$("fileInput").onchange=e=>{let f=e.target.files[0];if(f&&activeId)sendMessage("📎 "+f.name+" (demo attachment)");e.target.value=""};
+$("newChat").onclick=()=>{$("modalTitle").textContent="Start a new chat";$("modalText").textContent="Enter a name to add a demo conversation."; $("modalInput").value="";$("modalBack").classList.add("show");$("modalInput").focus()};
+$("cancelModal").onclick=()=>$("modalBack").classList.remove("show");
+$("confirmModal").onclick=()=>{let name=$("modalInput").value.trim();if(!name){toast("Please enter a contact name.");return}let id=Date.now();chats.unshift({id,name,initials:name.split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase(),color:"linear-gradient(145deg,#818cf8,#4338ca)",status:"new contact",group:false,unread:0,preview:"Start a conversation",time:"Now",messages:[]});save();$("modalBack").classList.remove("show");renderContacts();openChat(id)};
+$("modalInput").onkeydown=e=>{if(e.key==="Enter")$("confirmModal").click()};
+$("themeBtn").onclick=()=>{dark=!dark;document.documentElement.style.setProperty("--bg",dark?"#101d20":"#e9eff2");document.documentElement.style.setProperty("--panel",dark?"#17272b":"#fff");document.documentElement.style.setProperty("--side",dark?"#142226":"#f8fafb");document.documentElement.style.setProperty("--text",dark?"#e5f1ef":"#17252b");document.documentElement.style.setProperty("--muted",dark?"#9aadaa":"#718087");document.documentElement.style.setProperty("--line",dark?"#2b4144":"#e8edef");document.querySelector(".chatarea").style.background=dark?"#18292c":"#f4f7f7";document.querySelector(".chathead").style.background=dark?"#17272b":"white";document.querySelector(".composerwrap").style.background=dark?"#17272b":"white";document.querySelector(".messages").style.backgroundColor=dark?"#1d3031":"#edf3f1";document.querySelector(".messageinput").style.background=dark?"#203438":"#f6f8f8";document.querySelectorAll(".message:not(.mine)").forEach(x=>x.style.background=dark?"#294044":"white");toast(dark?"Dark appearance enabled":"Light appearance enabled")};
+$("settingsBtn").onclick=()=>toast("Demo settings · Account and privacy controls need backend integration.");
+$("callBtn").onclick=()=>toast("Voice calling needs a real-time calling service.");
+$("videoBtn").onclick=()=>toast("Video calling needs WebRTC and a signaling backend.");
+$("chatMore").onclick=()=>toast("More chat options will be available in the connected version.");
+renderContacts();
+</script>
+</body>
+</html>'''
+
+path = Path("/mnt/data/NexChat/index.html")
+path.parent.mkdir(parents=True, exist_ok=True)
+path.write_text(html, encoding="utf-8")
+print(f"Created: {path} ({len(html):,} characters)")
